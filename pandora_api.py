@@ -1,0 +1,34 @@
+import requests
+import json
+
+username = 'gadaget612@aol.com'
+passwrd = 'gizmos'
+
+headers = {
+    'Content-type': 'application/json;charset-utf-8',
+    'X-CsrfToken': '',
+    'X-AuthToken': ''
+}
+data = {
+    'existingAuthToken': None,
+    'keppLoggedIn': False,
+    'password': str(passwrd),
+    'username': str(username),
+}
+cookies = {}
+
+host='https://www.pandora.com'
+main_api_endpoint = host+'/api'
+auth_endpoint = host+main_api_endpoint+'/v1/auth/login'
+
+# get csrf token
+resp_csrf = requests.head(host)
+cookies['csrftoken'] = resp_csrf.cookies['csrftoken']
+headers['X-CsrfToken'] = resp_csrf.cookies['csrftoken']
+
+# get auth token
+resp_auth = requests.post(auth_endpoint,
+                         data=data,
+                         headers=headers,
+                         cookies=cookies)
+headers['X-AuthToken'] = resp_auth.text['']
